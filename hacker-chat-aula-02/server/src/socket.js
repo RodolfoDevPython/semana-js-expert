@@ -1,5 +1,6 @@
 import http from "http";
 import { v4 } from "uuid";
+import { constants } from "./constants.js";
 
 export default class SocketServer {
     constructor({ port }) {
@@ -18,12 +19,13 @@ export default class SocketServer {
             // aii temos de criar o header de Handshake para sinalizar que foi feito a troca...
             const headers = [
                 'HTTP/1.1 101 Web Socket Protocol Handshake',
-                'upgrade: WebSocket',
+                'Upgrade: WebSocket',
                 'Connection: Upgrade',
                 ''
-            ].map( line => line.concat('\r\n').join("") )
+            ].map( line => line.concat('\r\n')).join("") 
 
             socket.write(headers)
+            eventEmitter.emit(constants.event.NEW_USER_CONNECTED, socket)
         })
 
 
